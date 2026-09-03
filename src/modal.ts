@@ -607,7 +607,7 @@ class VexConnectModal {
     f.className = 'foot'
     f.innerHTML = `
       <img src="${NODESPARK_LOGO}" width="12" height="12" alt="" aria-hidden="true" style="border-radius:3px;object-fit:cover"/>
-      VexConnect&nbsp;·&nbsp;by NodeSpark Labs`
+      Secured by VexConnect&nbsp;·&nbsp;nodespark.org`
     return f
   }
 
