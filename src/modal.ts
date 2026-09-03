@@ -54,6 +54,8 @@ const VEXWALLET_ICON = `data:image/svg+xml;base64,${btoa(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0F172A"/><path d="M14 18L32 46L50 18H41L32 34L23 18Z" fill="#F59E0B"/></svg>'
 )}`
 
+const NODESPARK_LOGO = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnR3JhZGllbnQiIGN4PSIzNSUiIGN5PSIzMCUiIHI9Ijg1JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxQjIwNDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTQxODMzIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJub2RlR3JhZGllbnRQb3MiIHgxPSIwIiB5MT0iMCIgeDI9IjUwMCIgeTI9IjAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJBOTNFMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzVDRjUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InN0YXJHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkZFOUI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0Y1QTgzQyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9Im5vZGVHbG93IiB4PSItMTUwJSIgeT0iLTE1MCUiIHdpZHRoPSI0MDAlIiBoZWlnaHQ9IjQwMCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIxMCIgcmVzdWx0PSJibHVyIi8+CiAgICAgIDxmZU1lcmdlPjxmZU1lcmdlTm9kZSBpbj0iYmx1ciIvPjxmZU1lcmdlTm9kZSBpbj0iU291cmNlR3JhcGhpYyIvPjwvZmVNZXJnZT4KICAgIDwvZmlsdGVyPgogICAgPGZpbHRlciBpZD0ic3Rhckdsb3ciIHg9Ii0xNTAlIiB5PSItMTUwJSIgd2lkdGg9IjQwMCUiIGhlaWdodD0iNDAwJSI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE0IiByZXN1bHQ9ImJsdXIiLz4KICAgICAgPGZlTWVyZ2U+PGZlTWVyZ2VOb2RlIGluPSJibHVyIi8+PGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+PC9mZU1lcmdlPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiByeD0iMTIwIiBmaWxsPSJ1cmwoI2JnR3JhZGllbnQpIi8+CiAgPGcgc3Ryb2tlPSIjNEE2QkM0IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1vcGFjaXR5PSIwLjU1Ij4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIxMjgiIHkyPSIxODAiLz4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIzNzIiIHkyPSIxODAiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIxODAiIHgyPSIxMjgiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIxODAiIHgyPSIzNzIiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIzMTgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIzMTgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIxODAiIHgyPSIzNzIiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIxODAiIHgyPSIxMjgiIHkyPSIzMTgiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI25vZGVHbG93KSI+CiAgICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSIxMDgiIHI9IjI0IiBmaWxsPSIjNEE3OEQ2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIxODAiIHI9IjI0IiBmaWxsPSIjMkE5M0UwIi8+CiAgICA8Y2lyY2xlIGN4PSIzNzIiIGN5PSIxODAiIHI9IjI0IiBmaWxsPSIjNkU1Q0YwIi8+CiAgICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIzMTgiIHI9IjI0IiBmaWxsPSIjNEE3OEQ2Ii8+CiAgICA8Y2lyY2xlIGN4PSIzNzIiIGN5PSIzMTgiIHI9IjI0IiBmaWxsPSIjN0M1Q0Y1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSIzODgiIHI9IjI0IiBmaWxsPSIjNzI1OUYyIi8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzdGFyR2xvdykiPgogICAgPHBhdGggZD0iTTI1MCAxOTUgTDI2MiAyMzMgTDMwMCAyNDUgTDI2MiAyNTcgTDI1MCAyOTUgTDIzOCAyNTcgTDIwMCAyNDUgTDIzOCAyMzMgWiIgZmlsbD0idXJsKCNzdGFyR3JhZGllbnQpIi8+CiAgPC9nPgo8L3N2Zz4K`
+
 const DEFAULT_WALLETS: WalletEntry[] = [
   {
     id: 'vexwallet',
@@ -336,10 +338,7 @@ class VexConnectModal {
     const brand = document.createElement('div')
     brand.className = 'hdr-brand'
     brand.innerHTML = `
-      <svg class="hdr-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect width="24" height="24" rx="6" fill="#0F172A"/>
-        <path d="M5 7L12 17L19 7H15.5L12 13L8.5 7Z" fill="#F59E0B"/>
-      </svg>
+      <img class="hdr-logo" src="${NODESPARK_LOGO}" alt="NodeSpark Labs" aria-hidden="true"/>
       <span class="hdr-t">${titles[this.view]}</span>`
 
     const x = document.createElement('button')
@@ -597,10 +596,8 @@ class VexConnectModal {
     const f = document.createElement('div')
     f.className = 'foot'
     f.innerHTML = `
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-      </svg>
-      Secured by VexConnect&nbsp;·&nbsp;vexconnect.io`
+      <img src="${NODESPARK_LOGO}" width="12" height="12" alt="" aria-hidden="true" style="border-radius:3px;object-fit:cover"/>
+      VexConnect&nbsp;·&nbsp;by NodeSpark Labs`
     return f
   }
 
