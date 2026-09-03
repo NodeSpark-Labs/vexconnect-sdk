@@ -72,6 +72,7 @@ const DEFAULT_WALLETS: WalletEntry[] = [
     name: 'VexVault',
     iconUrl: VEXVAULT_ICON,
     description: 'Self-custody wallet',
+    deepLinkScheme: 'vexvault://',
     playStoreUrl: 'https://nodespark.org',
   },
 ]
