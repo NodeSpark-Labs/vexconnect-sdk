@@ -348,7 +348,33 @@ class VexConnectModal {
     const brand = document.createElement('div')
     brand.className = 'hdr-brand'
     brand.innerHTML = `
-      <img class="hdr-logo" src="${NODESPARK_LOGO}" alt="NodeSpark Labs" aria-hidden="true"/>
+      <svg class="hdr-logo" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="vc-bg" cx="35%" cy="30%" r="85%">
+            <stop offset="0%" stop-color="#1B2048"/>
+            <stop offset="100%" stop-color="#141833"/>
+          </radialGradient>
+          <linearGradient id="vc-star" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#FFE9B8"/>
+            <stop offset="100%" stop-color="#F5A83C"/>
+          </linearGradient>
+        </defs>
+        <rect width="500" height="500" rx="120" fill="url(#vc-bg)"/>
+        <g stroke="#4A6BC4" stroke-width="3" stroke-opacity="0.55">
+          <line x1="250" y1="108" x2="128" y2="180"/><line x1="250" y1="108" x2="372" y2="180"/>
+          <line x1="128" y1="180" x2="128" y2="318"/><line x1="372" y1="180" x2="372" y2="318"/>
+          <line x1="128" y1="318" x2="250" y2="388"/><line x1="372" y1="318" x2="250" y2="388"/>
+          <line x1="250" y1="108" x2="250" y2="388"/>
+          <line x1="128" y1="180" x2="372" y2="318"/><line x1="372" y1="180" x2="128" y2="318"/>
+        </g>
+        <circle cx="250" cy="108" r="24" fill="#4A78D6"/>
+        <circle cx="128" cy="180" r="24" fill="#2A93E0"/>
+        <circle cx="372" cy="180" r="24" fill="#6E5CF0"/>
+        <circle cx="128" cy="318" r="24" fill="#4A78D6"/>
+        <circle cx="372" cy="318" r="24" fill="#7C5CF5"/>
+        <circle cx="250" cy="388" r="24" fill="#7259F2"/>
+        <path d="M250 195 L262 233 L300 245 L262 257 L250 295 L238 257 L200 245 L238 233 Z" fill="url(#vc-star)"/>
+      </svg>
       <span class="hdr-t">${titles[this.view]}</span>`
 
     const x = document.createElement('button')
