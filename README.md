@@ -31,7 +31,7 @@ console.log(session.publicKey) // wallet's public key
 const result = await bridge.sendTransaction({
   actions: [
     {
-      account: 'eosio.token',
+      account: 'vex.token',
       name: 'transfer',
       authorization: [{ actor: session.account, permission: 'active' }],
       data: {
@@ -96,7 +96,7 @@ Sends a transaction to the wallet for signing. The wallet shows an approval dial
 const result = await bridge.sendTransaction({
   actions: [
     {
-      account:       'eosio.token',   // contract account
+      account:       'vex.token',   // contract account
       name:          'transfer',      // action name
       authorization: [{ actor: session.account, permission: 'active' }],
       data: {                         // action data — resolved against live ABI
@@ -186,7 +186,7 @@ export default function App() {
     if (!bridge || !session) return
     const result = await bridge.sendTransaction({
       actions: [{
-        account:       'eosio.token',
+        account:       'vex.token',
         name:          'transfer',
         authorization: [{ actor: session.account, permission: 'active' }],
         data: { from: session.account, to: 'recipient', quantity: '1.0000 VEX', memo: '' },
