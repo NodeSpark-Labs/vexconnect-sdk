@@ -5,12 +5,7 @@ import {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-/** Relay hosted by Pixel Genius. First entry is the one embedded in the
- * pairing URI (the only one the wallet ever learns about from a QR scan) —
- * later entries are tried only as reconnect fallbacks for an already-paired
- * session. Redundancy only actually kicks in once a second relay is deployed
- * and added here; with one entry this behaves exactly as a single relay. */
-export const VEXCONNECT_RELAY = 'wss://connect.nodespark.fun'
+export const VEXCONNECT_RELAY = 'wss://connect.nodespark.org'
 const DEFAULT_RELAY_URLS = [VEXCONNECT_RELAY]
 
 /** How long a silent resume waits for the wallet to answer a ping before giving up. */
@@ -90,9 +85,6 @@ export interface VexConnectOptions {
   dappIcon?: string
   /** Session connect timeout ms. Default: 300 000 */
   connectTimeoutMs?: number
-  /** Relay URLs to try, in order. First is embedded in the pairing URI;
-   * later ones are reconnect-only fallbacks. Default: just the hosted relay. */
-  relayUrls?: string[]
 }
 
 export interface VexSession {
@@ -142,7 +134,7 @@ interface RelayWireMsg {
 
 export class VexConnect {
   private readonly sid: string
-  private readonly opts: Required<Omit<VexConnectOptions, 'relayUrls'>> & { relayUrls: string[] }
+  private readonly opts: Required<VexConnectOptions>
   /** Own X25519 keypair — only generated for a fresh pairing. Resume skips
    * ECDH entirely and reuses the already-derived session key. */
   private readonly keyPair: X25519KeyPair | null
@@ -184,7 +176,6 @@ export class VexConnect {
       dappUrl:  opts.dappUrl,
       dappIcon: opts.dappIcon ?? '',
       connectTimeoutMs: opts.connectTimeoutMs ?? 300_000,
-      relayUrls: opts.relayUrls ?? DEFAULT_RELAY_URLS,
     }
 
     // Mobile browsers suspend/kill the WS while the tab is backgrounded (e.g.
@@ -201,7 +192,7 @@ export class VexConnect {
   }
 
   private get currentRelayUrl(): string {
-    return this.opts.relayUrls[this.relayIndex % this.opts.relayUrls.length]
+    return DEFAULT_RELAY_URLS[this.relayIndex % DEFAULT_RELAY_URLS.length]
   }
 
   private reconnectIfNeeded() {
@@ -213,8 +204,7 @@ export class VexConnect {
     this.scheduleReconnect()
   }
 
-  /** Exponential backoff (1s/2s/4s/8s/16s), trying the next relay in
-   * `relayUrls` each attempt. Gives up and fires disconnectHandlers only
+  /** Exponential backoff (1s/2s/4s/8s/16s). Gives up and fires disconnectHandlers only
    * after RECONNECT_MAX_ATTEMPTS - a brief blip shouldn't kick the user back
    * to the connect screen, but a genuinely dead wallet/network should. */
   private scheduleReconnect() {
