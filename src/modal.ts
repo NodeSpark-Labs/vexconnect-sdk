@@ -61,7 +61,7 @@ const DEFAULT_WALLETS: WalletEntry[] = [
     iconUrl: VEXWALLET_ICON,
     description: 'Official Vexanium wallet · Android',
     deepLinkScheme: 'vexconnect://',
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=id.pixelgenius.vexwallet',
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=id.nodesparklabs.vexwallet',
   },
 ]
 
