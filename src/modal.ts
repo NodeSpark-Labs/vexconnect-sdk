@@ -189,6 +189,9 @@ const CSS = `
 .qdiv{width:100%;display:flex;align-items:center;gap:8px;margin:4px 0}
 .qdiv::before,.qdiv::after{content:'';flex:1;height:1px;background:var(--bd)}
 .qdiv span{font-size:10px;color:var(--mt);text-transform:uppercase;letter-spacing:.06em}
+.store-ico{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);color:var(--mt);transition:.15s;text-decoration:none}
+.store-ico:hover{background:rgba(255,255,255,.1);color:var(--tx);border-color:rgba(255,255,255,.15)}
+.modal.light .store-ico:hover{background:rgba(0,0,0,.07);border-color:rgba(0,0,0,.12)}
 .dlbtn{width:100%;padding:13px;border-radius:12px;background:var(--ac);color:#0f172a;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.15s;display:block;text-align:center;text-decoration:none}
 .dlbtn:hover{opacity:.88;transform:translateY(-1px)}
 .dlbtn2{width:100%;padding:12px;border-radius:12px;background:transparent;color:var(--ac);font-size:13px;font-weight:600;border:1.5px solid rgba(245,158,11,.3);cursor:pointer;transition:.15s;text-decoration:none;display:block;text-align:center}
@@ -429,22 +432,21 @@ class VexConnectModal {
       })
       row.appendChild(btn)
 
-      // Download icon button — shows store download links
-      const dlBtn = document.createElement('button')
-      dlBtn.className = 'qr-ico'
-      dlBtn.setAttribute('aria-label', 'Download wallet')
-      dlBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-        <polyline points="7 10 12 15 17 10"/>
-        <line x1="12" y1="15" x2="12" y2="3"/>
+      // QR icon button — shows QR code view
+      const qrBtn = document.createElement('button')
+      qrBtn.className = 'qr-ico'
+      qrBtn.setAttribute('aria-label', 'Show QR code')
+      qrBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/>
       </svg>`
-      dlBtn.addEventListener('click', () => {
+      qrBtn.addEventListener('click', () => {
         this.selected = w
         this.view = 'qr'
         this.render()
         this.startConnect()
       })
-      row.appendChild(dlBtn)
+      row.appendChild(qrBtn)
 
       list.appendChild(row)
     }
@@ -471,29 +473,47 @@ class VexConnectModal {
 
     p.insertAdjacentHTML('beforeend', `<p class="hint">Scan with ${this.selected?.name ?? 'your wallet'}</p>`)
 
-    // Download section — store links from relay registry
     const w = this.selected
-    if (w && (w.playStoreUrl || w.appStoreUrl)) {
-      p.insertAdjacentHTML('beforeend', `<div class="qdiv"><span>Don't have the app?</span></div>`)
-      const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-
-      if (w.playStoreUrl && !isIos) {
-        const a = document.createElement('a')
-        a.className = 'dlbtn'
-        a.href = w.playStoreUrl
-        a.target = '_blank'
-        a.rel = 'noopener noreferrer'
-        a.textContent = 'Get it on Google Play'
-        p.appendChild(a)
+    if (w) {
+      // Open wallet via deep link
+      if (w.deepLinkScheme) {
+        const openBtn = document.createElement('button')
+        openBtn.className = 'dlbtn'
+        openBtn.textContent = `Open ${w.name}`
+        openBtn.addEventListener('click', () => { window.location.href = walletOpenUrl(w, this.vc.getUri()) })
+        p.appendChild(openBtn)
       }
-      if (w.appStoreUrl) {
-        const a = document.createElement('a')
-        a.className = (isIos || !w.playStoreUrl) ? 'dlbtn' : 'dlbtn2'
-        a.href = w.appStoreUrl
-        a.target = '_blank'
-        a.rel = 'noopener noreferrer'
-        a.textContent = 'Download on App Store'
-        p.appendChild(a)
+
+      // Download section
+      if (w.playStoreUrl || w.appStoreUrl) {
+        p.insertAdjacentHTML('beforeend', `<div class="qdiv"><span>Don't have ${w.name}?</span></div>`)
+
+        const storeRow = document.createElement('div')
+        storeRow.style.cssText = 'display:flex;gap:10px;justify-content:center'
+
+        if (w.playStoreUrl) {
+          const a = document.createElement('a')
+          a.href = w.playStoreUrl
+          a.target = '_blank'
+          a.rel = 'noopener noreferrer'
+          a.title = 'Google Play'
+          a.className = 'store-ico'
+          a.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76a2 2 0 01-.93-.94V1.18A2 2 0 013.18.24L13.9 12 3.18 23.76zm14.3-7.26l-2.4-1.38L12.9 12l2.18-3.12 2.4-1.38L22 12l-4.52 4.5zM4.1.06l10.7 6.17-2.17 3.12L4.1.06zm0 23.88l8.53-9.29 2.17 3.12L4.1 23.94z"/></svg>`
+          storeRow.appendChild(a)
+        }
+
+        if (w.appStoreUrl) {
+          const a = document.createElement('a')
+          a.href = w.appStoreUrl
+          a.target = '_blank'
+          a.rel = 'noopener noreferrer'
+          a.title = 'App Store'
+          a.className = 'store-ico'
+          a.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>`
+          storeRow.appendChild(a)
+        }
+
+        p.appendChild(storeRow)
       }
     }
 
@@ -585,6 +605,11 @@ class VexConnectModal {
 
       openBtn.addEventListener('click', tryOpen)
       p.appendChild(openBtn)
+
+      // Auto-open on mobile — no need to tap manually
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        requestAnimationFrame(tryOpen)
+      }
     }
 
     return p
