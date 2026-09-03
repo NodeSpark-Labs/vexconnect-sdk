@@ -412,8 +412,9 @@ export class VexConnect {
     if (!this.session || !this.ws || this.ws.readyState !== WebSocket.OPEN)
       return Promise.reject(new Error('VexConnect: no active session'))
 
-    // Bring wallet app to foreground so the user sees the approval dialog.
-    if (this.walletDeepLink && typeof window !== 'undefined') {
+    // Bring wallet app to foreground — mobile only, desktop browsers don't have the app.
+    const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    if (isMobile && this.walletDeepLink) {
       window.location.href = this.walletDeepLink
     }
 
