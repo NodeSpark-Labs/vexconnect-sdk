@@ -1,6 +1,6 @@
 {
   "name": "@nodespark/vexconnect",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Connect web dApps to VexWallet — core SDK + modal UI",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
