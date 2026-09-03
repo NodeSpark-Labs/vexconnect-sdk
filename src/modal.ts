@@ -1,4 +1,3 @@
-import QRCode from 'qrcode'
 import { VexConnect, VexSession, VEXCONNECT_RELAY } from './core.js'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -177,24 +176,15 @@ const CSS = `
 .foot{display:flex;align-items:center;justify-content:center;gap:5px;padding:12px 12px 18px;color:var(--mt);font-size:10px;letter-spacing:.02em;opacity:.7}
 .foot svg{flex-shrink:0}
 
-/* ── QR view ── */
-.qrp{padding:10px 20px 8px;display:flex;flex-direction:column;align-items:center}
-.back{background:none;border:none;cursor:pointer;color:var(--mt);font-size:12px;padding:0 0 12px;align-self:flex-start;display:flex;align-items:center;gap:3px;transition:.15s}
+/* ── QR / Download view ── */
+.qrp{padding:10px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.back{background:none;border:none;cursor:pointer;color:var(--mt);font-size:12px;padding:0 0 4px;align-self:flex-start;display:flex;align-items:center;gap:3px;transition:.15s}
 .back:hover{color:var(--tx)}
-.qrbox{background:#fff;border-radius:16px;padding:12px;width:260px;height:260px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.25)}
-.qrbox svg{width:236px;height:236px}
-.qrlogo{position:absolute;width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px #fff,0 2px 12px rgba(0,0,0,.2)}
-.qrlogo img{width:38px;height:38px;object-fit:cover;border-radius:50%}
-.hint{font-size:12px;color:var(--mt);text-align:center;margin-top:14px;line-height:1.5}
-.cpbtn{margin-top:10px;display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
-.cpbtn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.14)}
-.modal.light .cpbtn:hover{background:rgba(0,0,0,.07);border-color:rgba(0,0,0,.14)}
-.cpbtn.copied{color:var(--ac);border-color:rgba(245,158,11,.3)}
-.div{width:100%;display:flex;align-items:center;gap:8px;margin:14px 0 10px}
-.div::before,.div::after{content:'';flex:1;height:1px;background:var(--bd)}
-.div span{font-size:10px;color:var(--mt);text-transform:uppercase;letter-spacing:.06em}
-.dlbtn{width:100%;padding:13px;border-radius:12px;background:var(--ac);color:#0f172a;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.15s}
+.hint{font-size:12px;color:var(--mt);text-align:center;line-height:1.5}
+.dlbtn{width:100%;padding:13px;border-radius:12px;background:var(--ac);color:#0f172a;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.15s;display:block;text-align:center;text-decoration:none}
 .dlbtn:hover{opacity:.88;transform:translateY(-1px)}
+.dlbtn2{width:100%;padding:12px;border-radius:12px;background:transparent;color:var(--ac);font-size:13px;font-weight:600;border:1.5px solid rgba(245,158,11,.3);cursor:pointer;transition:.15s;text-decoration:none;display:block;text-align:center}
+.dlbtn2:hover{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.5)}
 
 /* ── Center panel (connecting / connected / error) ── */
 .ctr{padding:28px 22px 32px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
@@ -293,6 +283,16 @@ class VexConnectModal {
   private onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') this.dismiss() }
 
   private render() {
+    // After initial mount, only replace the card's content — avoids the full
+    // shadow-DOM wipe that causes the overlay to blink on every state change.
+    const existing = this.shadow.querySelector<HTMLElement>('.modal')
+    if (existing) {
+      existing.innerHTML = ''
+      existing.appendChild(this.buildHeader())
+      existing.appendChild(this.buildBody())
+      return
+    }
+
     this.shadow.innerHTML = ''
 
     const style = document.createElement('style')
@@ -314,7 +314,7 @@ class VexConnectModal {
 
   private buildHeader() {
     const titles: Record<View, string> = {
-      loading: 'Connect Wallet', wallets: 'Connect Wallet', qr: 'Scan QR Code',
+      loading: 'Connect Wallet', wallets: 'Connect Wallet', qr: 'Get Wallet',
       connecting: 'Connecting…', connected: 'Connected', error: 'Connection Failed',
     }
     const h = document.createElement('div')
@@ -421,21 +421,21 @@ class VexConnectModal {
       })
       row.appendChild(btn)
 
-      // QR icon button — always shows QR view
-      const qrBtn = document.createElement('button')
-      qrBtn.className = 'qr-ico'
-      qrBtn.setAttribute('aria-label', 'Show QR code')
-      qrBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/>
+      // Download icon button — shows store download links
+      const dlBtn = document.createElement('button')
+      dlBtn.className = 'qr-ico'
+      dlBtn.setAttribute('aria-label', 'Download wallet')
+      dlBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
       </svg>`
-      qrBtn.addEventListener('click', () => {
+      dlBtn.addEventListener('click', () => {
         this.selected = w
         this.view = 'qr'
         this.render()
-        this.startConnect()
       })
-      row.appendChild(qrBtn)
+      row.appendChild(dlBtn)
 
       list.appendChild(row)
     }
@@ -446,7 +446,6 @@ class VexConnectModal {
 
   private buildQr() {
     const wrap = document.createElement('div')
-
     const p = document.createElement('div')
     p.className = 'qrp'
 
@@ -456,76 +455,49 @@ class VexConnectModal {
     back.addEventListener('click', () => { this.view = 'wallets'; this.render() })
     p.appendChild(back)
 
-    const qrBox = document.createElement('div')
-    qrBox.className = 'qrbox'
-    qrBox.id = 'vc-qr'
-    p.appendChild(qrBox)
+    const w = this.selected
+    if (w) {
+      if (w.iconUrl) {
+        const ico = document.createElement('div')
+        ico.style.cssText = 'width:72px;height:72px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center'
+        ico.innerHTML = `<img src="${w.iconUrl}" style="width:100%;height:100%;object-fit:cover" alt="${w.name}"/>`
+        p.appendChild(ico)
+      }
+      p.insertAdjacentHTML('beforeend', `
+        <div class="ct">${w.name}</div>
+        ${w.description ? `<div class="cs">${w.description}</div>` : ''}
+        <div class="hint" style="margin-top:4px">Download the app to connect your wallet.</div>`)
 
-    p.insertAdjacentHTML('beforeend', `<p class="hint">Scan with ${this.selected?.name ?? 'VexWallet'}</p>`)
+      const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+      const isAndroid = /Android/i.test(navigator.userAgent)
 
-    // Copy URI button
-    const cpBtn = document.createElement('button')
-    cpBtn.className = 'cpbtn'
-    cpBtn.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-      </svg>
-      Copy URI`
-    cpBtn.addEventListener('click', () => {
-      navigator.clipboard?.writeText(this.vc.getUri()).catch(() => {})
-      cpBtn.classList.add('copied')
-      cpBtn.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-        Copied!`
-      setTimeout(() => {
-        cpBtn.classList.remove('copied')
-        cpBtn.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          Copy URI`
-      }, 2000)
-    })
-    p.appendChild(cpBtn)
-
-    if (this.selected?.deepLinkScheme) {
-      const wallet = this.selected
-      p.insertAdjacentHTML('beforeend', `<div class="div"><span>or open on this device</span></div>`)
-      const dl = document.createElement('button')
-      dl.className = 'dlbtn'
-      dl.textContent = `Open ${wallet.name}`
-      dl.addEventListener('click', () => { window.location.href = walletOpenUrl(wallet, this.vc.getUri()) })
-      p.appendChild(dl)
+      if (w.playStoreUrl && !isIos) {
+        const a = document.createElement('a')
+        a.className = 'dlbtn'
+        a.href = w.playStoreUrl
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
+        a.textContent = 'Get it on Google Play'
+        p.appendChild(a)
+      }
+      if (w.appStoreUrl) {
+        const a = document.createElement('a')
+        a.className = (isIos || !w.playStoreUrl) ? 'dlbtn' : 'dlbtn2'
+        a.href = w.appStoreUrl
+        a.target = '_blank'
+        a.rel = 'noopener noreferrer'
+        a.textContent = 'Download on App Store'
+        if (!isAndroid && !w.playStoreUrl) a.style.marginTop = '14px'
+        p.appendChild(a)
+      }
+      if (!w.playStoreUrl && !w.appStoreUrl) {
+        p.insertAdjacentHTML('beforeend', `<div class="cs">Visit the wallet's website to get started.</div>`)
+      }
     }
 
     wrap.appendChild(p)
     wrap.appendChild(this.buildFooter())
-
-    requestAnimationFrame(() => this.renderQr())
     return wrap
-  }
-
-  private async renderQr() {
-    const el = this.shadow.getElementById('vc-qr')
-    if (!el) return
-    // Wrap in the selected wallet's universal link when it has one, so any
-    // generic camera QR scanner (not just the wallet's own) can open it.
-    const uri = this.selected ? walletOpenUrl(this.selected, this.vc.getUri()) : this.vc.getUri()
-    try {
-      el.innerHTML = await QRCode.toString(uri, {
-        type: 'svg', margin: 0,
-        color: { dark: '#000000', light: '#ffffff' },
-        errorCorrectionLevel: 'H',
-        width: 236,
-      })
-      const logo = document.createElement('div')
-      logo.className = 'qrlogo'
-      const iconSrc = this.selected?.iconUrl ?? ''
-      logo.innerHTML = `<img src="${iconSrc}" alt="wallet icon"/>`
-      el.appendChild(logo)
-    } catch { el.textContent = uri }
   }
 
   private startConnect() {
@@ -555,15 +527,42 @@ class VexConnectModal {
       <div class="ct">Waiting for approval</div>
       ${this.selected ? `<div class="cwn">${this.selected.name}</div>` : ''}
       <div class="cs">Open ${this.selected?.name ?? 'your wallet'} and approve the connection request.</div>`
+
     if (this.selected?.deepLinkScheme) {
       const wallet = this.selected
       const uri = walletOpenUrl(wallet, this.vc.getUri())
-      const btn = document.createElement('button')
-      btn.className = 'dlbtn'
-      btn.textContent = `Open ${wallet.name}`
-      btn.addEventListener('click', () => { window.location.href = uri })
-      p.appendChild(btn)
+
+      const openBtn = document.createElement('button')
+      openBtn.className = 'dlbtn'
+      openBtn.textContent = `Open ${wallet.name}`
+
+      const tryOpen = () => {
+        let appOpened = false
+        const onVisibility = () => { if (document.hidden) appOpened = true }
+        document.addEventListener('visibilitychange', onVisibility)
+        window.location.href = uri
+        setTimeout(() => {
+          document.removeEventListener('visibilitychange', onVisibility)
+          if (!appOpened && !this.session) {
+            const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+            const storeUrl = isIos ? wallet.appStoreUrl : wallet.playStoreUrl
+            if (storeUrl && !p.querySelector('.dlbtn2')) {
+              const a = document.createElement('a')
+              a.className = 'dlbtn2'
+              a.href = storeUrl
+              a.target = '_blank'
+              a.rel = 'noopener noreferrer'
+              a.textContent = `Get ${wallet.name}`
+              p.appendChild(a)
+            }
+          }
+        }, 2500)
+      }
+
+      openBtn.addEventListener('click', tryOpen)
+      p.appendChild(openBtn)
     }
+
     return p
   }
 

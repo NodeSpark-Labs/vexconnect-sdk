@@ -31,11 +31,9 @@
   "license": "MIT",
   "dependencies": {
     "@noble/curves": "^2.2.0",
-    "@noble/hashes": "^2.2.0",
-    "qrcode": "^1.5.4"
+    "@noble/hashes": "^2.2.0"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.5",
     "@types/ws": "^8.18.1",
     "typescript": "^5.7.3",
     "ws": "^8.21.1"
