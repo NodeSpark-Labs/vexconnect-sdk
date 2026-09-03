@@ -68,7 +68,6 @@ const { session, bridge } = await openVexConnectModal({
   theme:            'dark',              // 'light' | 'dark' | 'auto' (default: 'auto')
   accentColor:      '#f59e0b',           // optional — override accent color
   connectTimeoutMs: 300_000,             // optional — pairing timeout (default: 5 min)
-  relayUrls:        ['wss://connect.nodespark.org'], // optional — override/extend the relay fallback list (default: [wss://connect.nodespark.org])
 })
 ```
 
