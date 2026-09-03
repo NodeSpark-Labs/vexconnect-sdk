@@ -62,12 +62,13 @@ Sessions are automatically persisted in `localStorage` — on the next page load
 
 ```ts
 const { session, bridge } = await openVexConnectModal({
-  dappName:         'My dApp',           // required — shown in wallet approval dialog
-  dappUrl:          'https://mydapp.com', // required — shown in wallet approval dialog
-  dappIcon:         'https://mydapp.com/icon.png', // optional — shown in modal header
+  dappName:         'My dApp',           // required — shown in wallet's native approval screen
+  dappUrl:          'https://mydapp.com', // required — shown in wallet's native approval screen
+  dappIcon:         'https://mydapp.com/icon.png', // optional — sent to the wallet's native approval screen only, NOT rendered in the dApp-side modal (its header uses a fixed VexConnect brand mark)
   theme:            'dark',              // 'light' | 'dark' | 'auto' (default: 'auto')
   accentColor:      '#f59e0b',           // optional — override accent color
   connectTimeoutMs: 300_000,             // optional — pairing timeout (default: 5 min)
+  relayUrls:        ['wss://connect.nodespark.org'], // optional — override/extend the relay fallback list (default: [wss://connect.nodespark.org])
 })
 ```
 
@@ -152,6 +153,18 @@ Returns the active `VexSession`, or `null` if not connected.
 const session = bridge.currentSession
 if (session) {
   console.log('Connected as', session.account)
+}
+```
+
+---
+
+### `bridge.isConnected`
+
+Returns `true` if there's an active session and the underlying WebSocket to the relay is open, `false` otherwise. Useful for guarding calls to `sendTransaction()` without waiting on a `disconnect` event first.
+
+```ts
+if (bridge.isConnected) {
+  await bridge.sendTransaction({ actions: [...] })
 }
 ```
 
