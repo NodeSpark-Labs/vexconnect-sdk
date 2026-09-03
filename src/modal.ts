@@ -1,3 +1,4 @@
+import QRCode from 'qrcode'
 import { VexConnect, VexSession, VEXCONNECT_RELAY } from './core.js'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -180,7 +181,14 @@ const CSS = `
 .qrp{padding:10px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .back{background:none;border:none;cursor:pointer;color:var(--mt);font-size:12px;padding:0 0 4px;align-self:flex-start;display:flex;align-items:center;gap:3px;transition:.15s}
 .back:hover{color:var(--tx)}
+.qrbox{background:#fff;border-radius:16px;padding:12px;width:220px;height:220px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.qrbox svg{width:196px;height:196px}
+.qrlogo{position:absolute;width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px #fff,0 2px 12px rgba(0,0,0,.2)}
+.qrlogo img{width:34px;height:34px;object-fit:cover;border-radius:50%}
 .hint{font-size:12px;color:var(--mt);text-align:center;line-height:1.5}
+.qdiv{width:100%;display:flex;align-items:center;gap:8px;margin:4px 0}
+.qdiv::before,.qdiv::after{content:'';flex:1;height:1px;background:var(--bd)}
+.qdiv span{font-size:10px;color:var(--mt);text-transform:uppercase;letter-spacing:.06em}
 .dlbtn{width:100%;padding:13px;border-radius:12px;background:var(--ac);color:#0f172a;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:.15s;display:block;text-align:center;text-decoration:none}
 .dlbtn:hover{opacity:.88;transform:translateY(-1px)}
 .dlbtn2{width:100%;padding:12px;border-radius:12px;background:transparent;color:var(--ac);font-size:13px;font-weight:600;border:1.5px solid rgba(245,158,11,.3);cursor:pointer;transition:.15s;text-decoration:none;display:block;text-align:center}
@@ -434,6 +442,7 @@ class VexConnectModal {
         this.selected = w
         this.view = 'qr'
         this.render()
+        this.startConnect()
       })
       row.appendChild(dlBtn)
 
@@ -455,21 +464,18 @@ class VexConnectModal {
     back.addEventListener('click', () => { this.view = 'wallets'; this.render() })
     p.appendChild(back)
 
-    const w = this.selected
-    if (w) {
-      if (w.iconUrl) {
-        const ico = document.createElement('div')
-        ico.style.cssText = 'width:72px;height:72px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center'
-        ico.innerHTML = `<img src="${w.iconUrl}" style="width:100%;height:100%;object-fit:cover" alt="${w.name}"/>`
-        p.appendChild(ico)
-      }
-      p.insertAdjacentHTML('beforeend', `
-        <div class="ct">${w.name}</div>
-        ${w.description ? `<div class="cs">${w.description}</div>` : ''}
-        <div class="hint" style="margin-top:4px">Download the app to connect your wallet.</div>`)
+    const qrBox = document.createElement('div')
+    qrBox.className = 'qrbox'
+    qrBox.id = 'vc-qr'
+    p.appendChild(qrBox)
 
+    p.insertAdjacentHTML('beforeend', `<p class="hint">Scan with ${this.selected?.name ?? 'your wallet'}</p>`)
+
+    // Download section — store links from relay registry
+    const w = this.selected
+    if (w && (w.playStoreUrl || w.appStoreUrl)) {
+      p.insertAdjacentHTML('beforeend', `<div class="qdiv"><span>Don't have the app?</span></div>`)
       const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-      const isAndroid = /Android/i.test(navigator.userAgent)
 
       if (w.playStoreUrl && !isIos) {
         const a = document.createElement('a')
@@ -487,17 +493,35 @@ class VexConnectModal {
         a.target = '_blank'
         a.rel = 'noopener noreferrer'
         a.textContent = 'Download on App Store'
-        if (!isAndroid && !w.playStoreUrl) a.style.marginTop = '14px'
         p.appendChild(a)
-      }
-      if (!w.playStoreUrl && !w.appStoreUrl) {
-        p.insertAdjacentHTML('beforeend', `<div class="cs">Visit the wallet's website to get started.</div>`)
       }
     }
 
     wrap.appendChild(p)
     wrap.appendChild(this.buildFooter())
+
+    requestAnimationFrame(() => this.renderQr())
     return wrap
+  }
+
+  private async renderQr() {
+    const el = this.shadow.getElementById('vc-qr')
+    if (!el) return
+    const uri = this.selected ? walletOpenUrl(this.selected, this.vc.getUri()) : this.vc.getUri()
+    try {
+      el.innerHTML = await QRCode.toString(uri, {
+        type: 'svg', margin: 0,
+        color: { dark: '#000000', light: '#ffffff' },
+        errorCorrectionLevel: 'H',
+        width: 196,
+      })
+      const logo = document.createElement('div')
+      logo.className = 'qrlogo'
+      if (this.selected?.iconUrl) {
+        logo.innerHTML = `<img src="${this.selected.iconUrl}" alt="${this.selected.name}"/>`
+      }
+      el.appendChild(logo)
+    } catch { el.textContent = uri }
   }
 
   private startConnect() {
