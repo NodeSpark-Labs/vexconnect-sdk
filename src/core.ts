@@ -51,6 +51,8 @@ interface PersistedSession {
   sessionKeyB64Url: string
   session: VexSession
   approvedAt: number
+  walletDeepLink?: string
+  walletName?: string
 }
 
 function loadPersisted(): PersistedSession | null {
@@ -160,6 +162,9 @@ export class VexConnect {
     reject:  (e: Error) => void
   }>()
 
+  private walletDeepLink: string | null = null
+  private walletName: string | null = null
+
   private disconnectHandlers: Array<() => void> = []
   private errorHandlers:      Array<(e: Error) => void> = []
 
@@ -243,7 +248,11 @@ export class VexConnect {
       clearPersisted()
       return null
     }
-    return new VexConnect(opts, { sid: p.sid, sessionKey, session: p.session })
+    const vc = new VexConnect(opts, { sid: p.sid, sessionKey, session: p.session })
+    if (p.walletDeepLink || p.walletName) {
+      vc.setWalletInfo(p.walletDeepLink ?? null, p.walletName ?? null)
+    }
+    return vc
   }
 
   // ── URI ───────────────────────────────────────────────────────────────────
@@ -268,6 +277,19 @@ export class VexConnect {
     })
     if (this.opts.dappIcon) p.set('icon', this.opts.dappIcon)
     return `vexconnect://wc?${p}`
+  }
+
+  /** Called by the modal after pairing to store which wallet was selected.
+   * Persisted so deep link still works after a page-reload resume. */
+  setWalletInfo(deepLink: string | null, name: string | null) {
+    this.walletDeepLink = deepLink
+    this.walletName     = name
+    const p = loadPersisted()
+    if (p) savePersisted({
+      ...p,
+      walletDeepLink: deepLink ?? undefined,
+      walletName:     name     ?? undefined,
+    })
   }
 
   // ── Events ────────────────────────────────────────────────────────────────
@@ -389,6 +411,11 @@ export class VexConnect {
   sendTransaction(req: TransactionRequest): Promise<TransactionResult> {
     if (!this.session || !this.ws || this.ws.readyState !== WebSocket.OPEN)
       return Promise.reject(new Error('VexConnect: no active session'))
+
+    // Bring wallet app to foreground so the user sees the approval dialog.
+    if (this.walletDeepLink && typeof window !== 'undefined') {
+      window.location.href = this.walletDeepLink
+    }
 
     const requestId = crypto.randomUUID()
     return new Promise((resolve, reject) => {

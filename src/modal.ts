@@ -556,6 +556,12 @@ class VexConnectModal {
   private startConnect() {
     this.vc.connect()
       .then((s) => {
+        if (this.selected) {
+          this.vc.setWalletInfo(
+            this.selected.deepLinkScheme ?? null,
+            this.selected.name,
+          )
+        }
         this.session = s
         this.view = 'connected'
         this.render()
