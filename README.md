@@ -290,12 +290,6 @@ async function connect() {
 
 ---
 
-## Relay
-
-The official relay is hosted at `wss://connect.nodespark.org`.
-
----
-
 ## License
 
 Copyright (c) 2026 PT Nodespark Digital Tech.
