@@ -1,6 +1,6 @@
 {
   "name": "@nodespark/vexconnect",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Connect web dApps to VexWallet — core SDK + modal UI",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -28,7 +28,7 @@
     "blockchain",
     "wallet"
   ],
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "@noble/curves": "^2.2.0",
     "@noble/hashes": "^2.2.0",
