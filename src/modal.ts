@@ -50,7 +50,7 @@ export interface VexConnectResult {
 
 // ─── Default wallets ──────────────────────────────────────────────────────────
 
-const NODESPARK_LOGO = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImJnR3JhZGllbnQiIGN4PSIzNSUiIGN5PSIzMCUiIHI9Ijg1JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxQjIwNDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMTQxODMzIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJub2RlR3JhZGllbnRQb3MiIHgxPSIwIiB5MT0iMCIgeDI9IjUwMCIgeTI9IjAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJBOTNFMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzVDRjUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InN0YXJHcmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkZFOUI4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0Y1QTgzQyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9Im5vZGVHbG93IiB4PSItMTUwJSIgeT0iLTE1MCUiIHdpZHRoPSI0MDAlIiBoZWlnaHQ9IjQwMCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIxMCIgcmVzdWx0PSJibHVyIi8+CiAgICAgIDxmZU1lcmdlPjxmZU1lcmdlTm9kZSBpbj0iYmx1ciIvPjxmZU1lcmdlTm9kZSBpbj0iU291cmNlR3JhcGhpYyIvPjwvZmVNZXJnZT4KICAgIDwvZmlsdGVyPgogICAgPGZpbHRlciBpZD0ic3Rhckdsb3ciIHg9Ii0xNTAlIiB5PSItMTUwJSIgd2lkdGg9IjQwMCUiIGhlaWdodD0iNDAwJSI+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE0IiByZXN1bHQ9ImJsdXIiLz4KICAgICAgPGZlTWVyZ2U+PGZlTWVyZ2VOb2RlIGluPSJibHVyIi8+PGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+PC9mZU1lcmdlPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiByeD0iMTIwIiBmaWxsPSJ1cmwoI2JnR3JhZGllbnQpIi8+CiAgPGcgc3Ryb2tlPSIjNEE2QkM0IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1vcGFjaXR5PSIwLjU1Ij4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIxMjgiIHkyPSIxODAiLz4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIzNzIiIHkyPSIxODAiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIxODAiIHgyPSIxMjgiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIxODAiIHgyPSIzNzIiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIzMTgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIzMTgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIyNTAiIHkxPSIxMDgiIHgyPSIyNTAiIHkyPSIzODgiLz4KICAgIDxsaW5lIHgxPSIxMjgiIHkxPSIxODAiIHgyPSIzNzIiIHkyPSIzMTgiLz4KICAgIDxsaW5lIHgxPSIzNzIiIHkxPSIxODAiIHgyPSIxMjgiIHkyPSIzMTgiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI25vZGVHbG93KSI+CiAgICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSIxMDgiIHI9IjI0IiBmaWxsPSIjNEE3OEQ2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIxODAiIHI9IjI0IiBmaWxsPSIjMkE5M0UwIi8+CiAgICA8Y2lyY2xlIGN4PSIzNzIiIGN5PSIxODAiIHI9IjI0IiBmaWxsPSIjNkU1Q0YwIi8+CiAgICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIzMTgiIHI9IjI0IiBmaWxsPSIjNEE3OEQ2Ii8+CiAgICA8Y2lyY2xlIGN4PSIzNzIiIGN5PSIzMTgiIHI9IjI0IiBmaWxsPSIjN0M1Q0Y1Ii8+CiAgICA8Y2lyY2xlIGN4PSIyNTAiIGN5PSIzODgiIHI9IjI0IiBmaWxsPSIjNzI1OUYyIi8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzdGFyR2xvdykiPgogICAgPHBhdGggZD0iTTI1MCAxOTUgTDI2MiAyMzMgTDMwMCAyNDUgTDI2MiAyNTcgTDI1MCAyOTUgTDIzOCAyNTcgTDIwMCAyNDUgTDIzOCAyMzMgWiIgZmlsbD0idXJsKCNzdGFyR3JhZGllbnQpIi8+CiAgPC9nPgo8L3N2Zz4K`
+const VEXCONNECT_LOGO = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTIiIGZpbGw9IiMwQjE2MjYiLz4KICA8ZyBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS13aWR0aD0iNDYiIGZpbGw9Im5vbmUiPgogICAgPGxpbmUgeDE9IjE1MCIgeTE9IjE0OCIgeDI9IjI1NiIgeTI9IjM2NCIgc3Ryb2tlPSIjMDI4NEM3Ii8+CiAgICA8bGluZSB4MT0iMzYyIiB5MT0iMTQ4IiB4Mj0iMjU2IiB5Mj0iMzY0IiBzdHJva2U9IiMzOEJERjgiLz4KICA8L2c+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTQ4IiByPSIzOCIgZmlsbD0iIzBCMTYyNiIgc3Ryb2tlPSIjMDI4NEM3IiBzdHJva2Utd2lkdGg9IjE4Ii8+CiAgPGNpcmNsZSBjeD0iMzYyIiBjeT0iMTQ4IiByPSIzOCIgZmlsbD0iIzBCMTYyNiIgc3Ryb2tlPSIjMzhCREY4IiBzdHJva2Utd2lkdGg9IjE4Ii8+CiAgPGNpcmNsZSBjeD0iMjU2IiBjeT0iMzY0IiByPSI0MCIgZmlsbD0iI0YyQjkwQyIvPgo8L3N2Zz4=`
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
 
@@ -334,32 +334,15 @@ class VexConnectModal {
     const brand = document.createElement('div')
     brand.className = 'hdr-brand'
     brand.innerHTML = `
-      <svg class="hdr-logo" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <radialGradient id="vc-bg" cx="35%" cy="30%" r="85%">
-            <stop offset="0%" stop-color="#1B2048"/>
-            <stop offset="100%" stop-color="#141833"/>
-          </radialGradient>
-          <linearGradient id="vc-star" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#FFE9B8"/>
-            <stop offset="100%" stop-color="#F5A83C"/>
-          </linearGradient>
-        </defs>
-        <rect width="500" height="500" rx="120" fill="url(#vc-bg)"/>
-        <g stroke="#4A6BC4" stroke-width="3" stroke-opacity="0.55">
-          <line x1="250" y1="108" x2="128" y2="180"/><line x1="250" y1="108" x2="372" y2="180"/>
-          <line x1="128" y1="180" x2="128" y2="318"/><line x1="372" y1="180" x2="372" y2="318"/>
-          <line x1="128" y1="318" x2="250" y2="388"/><line x1="372" y1="318" x2="250" y2="388"/>
-          <line x1="250" y1="108" x2="250" y2="388"/>
-          <line x1="128" y1="180" x2="372" y2="318"/><line x1="372" y1="180" x2="128" y2="318"/>
+      <svg class="hdr-logo" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="512" height="512" rx="112" fill="#0B1626"/>
+        <g stroke-linecap="round" stroke-width="46">
+          <line x1="150" y1="148" x2="256" y2="364" stroke="#0284C7"/>
+          <line x1="362" y1="148" x2="256" y2="364" stroke="#38BDF8"/>
         </g>
-        <circle cx="250" cy="108" r="24" fill="#4A78D6"/>
-        <circle cx="128" cy="180" r="24" fill="#2A93E0"/>
-        <circle cx="372" cy="180" r="24" fill="#6E5CF0"/>
-        <circle cx="128" cy="318" r="24" fill="#4A78D6"/>
-        <circle cx="372" cy="318" r="24" fill="#7C5CF5"/>
-        <circle cx="250" cy="388" r="24" fill="#7259F2"/>
-        <path d="M250 195 L262 233 L300 245 L262 257 L250 295 L238 257 L200 245 L238 233 Z" fill="url(#vc-star)"/>
+        <circle cx="150" cy="148" r="38" fill="#0B1626" stroke="#0284C7" stroke-width="18"/>
+        <circle cx="362" cy="148" r="38" fill="#0B1626" stroke="#38BDF8" stroke-width="18"/>
+        <circle cx="256" cy="364" r="40" fill="#F2B90C"/>
       </svg>
       <span class="hdr-t">${titles[this.view]}</span>`
 
@@ -661,7 +644,7 @@ class VexConnectModal {
     const f = document.createElement('div')
     f.className = 'foot'
     f.innerHTML = `
-      <img src="${NODESPARK_LOGO}" width="12" height="12" alt="" aria-hidden="true" style="border-radius:3px;object-fit:cover"/>
+      <img src="${VEXCONNECT_LOGO}" width="12" height="12" alt="" aria-hidden="true" style="border-radius:3px;object-fit:cover"/>
       Secured by VexConnect&nbsp;·&nbsp;nodespark.org`
     return f
   }

@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/vexconnect-lockup.svg" alt="VexConnect" width="420"></p>
+
 # @nodespark/vexconnect
 
 Connect web dApps to Vexanium wallets — core SDK + modal UI.
