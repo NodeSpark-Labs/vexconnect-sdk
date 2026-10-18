@@ -29,6 +29,10 @@
     "wallet"
   ],
   "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NodeSpark-Labs/vexconnect-sdk.git"
+  },
   "dependencies": {
     "@noble/curves": "^2.2.0",
     "@noble/hashes": "^2.2.0",
