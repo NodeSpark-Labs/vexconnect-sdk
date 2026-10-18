@@ -296,4 +296,6 @@ The official relay is hosted at `wss://connect.nodespark.org`.
 
 ## License
 
-MIT © [NodeSpark Labs](https://nodespark.org)
+Copyright (c) 2026 PT Nodespark Digital Tech.
+
+You may use the unmodified SDK in your dApps and websites, including commercial ones. You may not modify it, rebrand it, or publish or sell it on its own. See [LICENSE](LICENSE) for the full terms. For other uses, contact info@nodespark.org.
